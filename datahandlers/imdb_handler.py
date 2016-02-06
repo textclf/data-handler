@@ -11,7 +11,7 @@ class ImdbDataHandler(BaseDataHandler):
     source defines the folder where the data is downloaded
     """
 
-    def get_data(self, type=BaseDataHandler.DATA_TRAIN):
+    def get_data(self, type=BaseDataHandler.DATA_TRAIN, shuffle=True):
         """
         Process the data from its source and returns two lists: texts and labels, ready for a classifier to be used
 
@@ -34,5 +34,8 @@ class ImdbDataHandler(BaseDataHandler):
             data.append((open(f, 'rb').read().lower()).replace('<br /><br />', '\n'))
             labels.append(0)
 
-        return (data, labels)
+        if shuffle:
+            return self.shuffle_data(data, labels)
+        else:
+            return (data, labels)
 

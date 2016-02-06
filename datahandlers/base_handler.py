@@ -1,3 +1,5 @@
+import numpy as np
+
 class DataHandlerException(Exception):
     pass
 
@@ -16,6 +18,12 @@ class BaseDataHandler(object):
         Process the data from its source and returns two lists: texts and labels, ready for a classifier to be used
         """
         raise NotImplementedError()
+
+    @staticmethod
+    def shuffle_data(train_values, labels):
+        combined_lists = zip(train_values, labels)
+        np.random.shuffle(combined_lists)
+        return zip(*combined_lists)
 
     @staticmethod
     def to_sentence_vectors(texts_list, sentences_per_paragraph, words_per_sentence, wv_container, prepend=False):
