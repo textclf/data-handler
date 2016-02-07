@@ -1,0 +1,1 @@
+from .imdb_handler import ImdbDataHandler
