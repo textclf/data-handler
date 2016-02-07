@@ -38,4 +38,3 @@ class ImdbDataHandler(BaseDataHandler):
             return self.shuffle_data(data, labels)
         else:
             return (data, labels)
-
