@@ -68,7 +68,7 @@ class BaseDataHandler(object):
         return x
 
     @staticmethod
-    def to_word_level_idx(texts_list, words_per_document, wv_container, prepend=False):
+    def to_word_level_idx(texts_list, wv_container, words_per_document=None, prepend=False):
         """
         Receives a list of texts. For each text, it converts the text into indices of a word
         vector container (Glove, WordToVec) for later use in the embedding of a neural network.
@@ -77,8 +77,11 @@ class BaseDataHandler(object):
         from util.language import tokenize_text
         texts_list = util.misc.parallel_run(tokenize_text, texts_list)
 
-        text_with_normalized_documents = BaseDataHandler.__normalize(wv_container.get_indices(texts_list), words_per_document, prepend)
-        return text_with_normalized_documents
+        if words_per_document is not None:
+            text_with_indices = BaseDataHandler.__normalize(wv_container.get_indices(texts_list), words_per_document, prepend)
+        else:
+            text_with_indices = wv_container.get_indices(texts_list)
+        return text_with_indices
 
     @staticmethod
     def to_sentence_level_idx(texts_list, sentences_per_paragraph, words_per_sentence, wv_container, prepend=False):

@@ -17,6 +17,9 @@ def tokenize_text(text):
     """
     Gets tokens from a text in English
     """
-    tokens = [token.lower_ for token in nlp(u'' + text.decode('ascii', errors='ignore'))]
+    if isinstance(text, unicode):
+        tokens = [token.lower_ for token in nlp(text)]
+    else:
+        tokens = [token.lower_ for token in nlp(u'' + text.decode('ascii', errors='ignore'))]
 
     return tokens

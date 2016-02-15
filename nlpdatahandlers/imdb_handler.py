@@ -14,8 +14,6 @@ class ImdbDataHandler(BaseDataHandler):
     def get_data(self, type=BaseDataHandler.DATA_TRAIN, shuffle=True):
         """
         Process the data from its source and returns two lists: texts and labels, ready for a classifier to be used
-
-        Data is not shuffled
         """
         if type not in (BaseDataHandler.DATA_TRAIN, BaseDataHandler.DATA_TEST):
             raise DataHandlerException("Only train and test data supported for ImdbHandler")

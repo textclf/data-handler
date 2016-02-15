@@ -1,2 +1,3 @@
 from base_handler import DataHandlerException, BaseDataHandler
 from imdb_handler import ImdbDataHandler
+from yelp_handler import YelpDataHandler
