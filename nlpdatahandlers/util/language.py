@@ -23,3 +23,9 @@ def tokenize_text(text):
         tokens = [token.lower_ for token in nlp(u'' + text.decode('ascii', errors='ignore'))]
 
     return tokens
+
+def parse_words(text):
+    '''
+    Returns text as a list of lists of characters
+    '''
+    return [[ch for ch in token.text] for token in nlp(u'' + text.decode('ascii', errors='ignore'))]

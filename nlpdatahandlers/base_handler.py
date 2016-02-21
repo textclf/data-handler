@@ -68,6 +68,26 @@ class BaseDataHandler(object):
         return x
 
     @staticmethod
+    def to_char_level_idx(texts_list, char_container, chars_per_word=None, words_per_document=None, prepend=False):
+        """
+        Receives a list of texts. For each text, it converts the text into a list of indices of a characters
+        for later use in the embedding of a neural network.
+        Texts are padded (or reduced) up to chars_per_word
+
+        char_container is assumed to be a method that converts characters to indices using a method
+        called get_indices()
+        """
+        from util.language import tokenize_text
+        texts_list = util.misc.parallel_run(tokenize_text, texts_list)
+
+        if words_per_document is not None:
+            text_with_indices = [BaseDataHandler.__normalize(char_container.get_indices(txt), chars_per_word, prepend) for txt in texts_list]
+            text_with_indices = BaseDataHandler.__normalize(text_with_indices, size=words_per_document, filler=[0] * chars_per_word)
+        else:
+            text_with_indices = char_container.get_indices(texts_list)
+        return text_with_indices
+
+    @staticmethod
     def to_word_level_idx(texts_list, wv_container, words_per_document=None, prepend=False):
         """
         Receives a list of texts. For each text, it converts the text into indices of a word
@@ -100,10 +120,9 @@ class BaseDataHandler(object):
         """
 
         from util.language import parse_paragraph
-
-        text_sentences = BaseDataHandler.__parallel_run(parse_paragraph, texts_list)
+        texts_list = util.misc.parallel_run(parse_paragraph, texts_list)
         text_with_normalized_sentences = [BaseDataHandler.__normalize(review, size=words_per_sentence, prepend=prepend)
-                                          for review in wv_container.get_indices(text_sentences)]
+                                          for review in wv_container.get_indices(texts_list)]
         text_padded_paragraphs = BaseDataHandler.__normalize(text_with_normalized_sentences,
                                                              size=sentences_per_paragraph, filler=[0] * words_per_sentence)
 
