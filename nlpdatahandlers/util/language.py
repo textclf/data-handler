@@ -10,7 +10,10 @@ def parse_paragraph(txt):
     """
     Takes a text and returns a list of lists of tokens, where each sublist is a sentence
     """
-    sentences = nlp(u'' + txt.decode('ascii', errors='ignore')).sents
+    if isinstance(txt, unicode):
+        sentences = nlp(txt).sents
+    else:
+        sentences = nlp(u'' + txt.decode('ascii', errors='ignore')).sents
     return [[t.text for t in s] for s in sentences]
 
 def tokenize_text(text):
